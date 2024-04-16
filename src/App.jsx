@@ -1,97 +1,22 @@
 import React, { useState } from 'react'
 import './App.css'
 import './index.css'
+import Header from './components/Header'
+import Create from './components/Create'
+import Show from './components/Show'
 
 const App = () => {
-
-  const [tasks, settasks] = useState([
-
-  ])
-  const [title, settitle] = useState("")
-
-  const submitHandler = (e) => {
-    e.preventDefault();
-
-    const copyTasks = [...tasks];
-    copyTasks.push({ title, completed: false });
-    settasks(copyTasks);
-    settitle("");
-  }
-
-  const deletehandeler = (i) => {
-    let isvalid = false;
-    if(tasks[i].completed === false) {
-      isvalid = confirm("Are you sure you want to delete");
-    }
-    if(isvalid || tasks[i].completed === true) {
-      const copyTasks = [...tasks];
-      copyTasks.splice(i, 1);
-      settasks(copyTasks);
-    }
-    
-  }
-
-  const CompleteTaskToggle = (e, i) => {
-
-    const copyTasks = [...tasks];
-    copyTasks[i].completed = !tasks[i].completed;
-    settasks(copyTasks);
-};
-
-let tasksrender = (
-  <h2 className="text-center text-orange-700 mr-[10%] text-2xl">
-      No Pending Tasks ...
-  </h2>
-);
-
-if (tasks.length > 0) {
-  tasksrender = tasks.map((task,index) => {
-    return (
-      <li key={index}>
-        <div className="task">
-            <div className="one">
-            <div onClick={(e) => CompleteTaskToggle(e,index)} className={` min-circle ${
-                                task.completed ? "bg-green-500" : "border"
-                            } `} ></div>
-            <h2 className={`${
-                                task.completed && "line-through"
-                            } `}>{task.title}</h2>
-            </div>
-            <div className="icon">
-            <i className="ri-edit-box-line"></i>
-            <i onClick={() => deletehandeler(index)} className="ri-delete-bin-6-line"></i>
-            </div>
-          </div>
-      </li>
-    )
-  })
-}
+  const [tasks, settasks] = useState([])
 
   return (
     <div>
      <div id="main">
       <div className="container">
-        <div className="to-do">
-          <div className="text">
-          <h1>LET'S TODO</h1>
-          <p>keep doing good things.</p>
-          </div>
-          <div className="circle">
-            <h1>{tasks.filter((t) => t.completed === true).length}/{tasks.length}</h1>
-          </div>
-        </div>
+        <Header tasks={tasks}/>
         {/*  */}
-         <form onSubmit={submitHandler}>
-         <input type="text" placeholder='write your next task ...' value={title} onChange={(e) => settitle(e.target.value)} />
-          <button type="submit">
-          <i id='button' className="ri-add-fill"></i>
-          </button>
-         </form>
+        <Create tasks={tasks} settasks={settasks}/>
          {/*  */}
-        <div className="tasks">
-          
-        </div>
-     <ul style={{listStyle: "none"}}>{tasksrender}</ul>
+        <Show tasks={tasks} settasks={settasks}/>
       </div>
      </div>
     </div>
